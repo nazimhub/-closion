@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Éclosion — Rencontres gratuites</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav>
+  <div class="logo">Écl<em>o</em>sion</div>
+  <div class="nav-links">
+    <a href="#decouvrir">Découvrir</a>
+    <a href="#matches">Mes connexions</a>
+    <a href="#direct">Messagerie</a>
+    <a href="#pourquoi">Pourquoi c'est gratuit</a>
+  </div>
+  <button class="nav-cta" id="navCta" onclick="openAuth('signup')">Créer un compte</button>
+  <div class="user-badge" id="userBadge">
+    <span class="avatar" id="userAvatar">?</span>
+    <span id="userName"></span>
+    <span class="vtag" id="userVtag" title="Identité vérifiée" style="display:none;">✓</span>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">100% gratuit · sans carte bancaire · pour toujours</div>
+  <h1>Une histoire commence<br>toujours par <i>une lettre</i>.</h1>
+  <p>Éclosion est un site de rencontre entièrement gratuit — pas d'abonnement caché, pas de fonctionnalité payante. Juste des profils sincères et des connexions qui comptent.</p>
+  <div class="hero-ctas">
+    <a href="javascript:void(0)" class="btn-primary" onclick="openAuth('signup')">Découvrir des profils</a>
+    <a href="#pourquoi" class="btn-ghost">Comment ça marche</a>
+  </div>
+  <div class="envelope-wrap">
+    <div class="envelope"></div>
+    <div class="card-peek">« Un café un de ces jours ? »</div>
+    <div class="flap"></div>
+    <div class="seal">É</div>
+  </div>
+  <div class="hero-hint">survolez l'enveloppe pour l'ouvrir</div>
+</section>
+
+<section id="decouvrir">
+  <div class="section-head">
+    <div class="section-eyebrow">Découvrir</div>
+    <h2>Des profils, pas des vitrines</h2>
+    <p>Chaque carte est une invitation. Faites glisser à droite pour envoyer une lettre, à gauche pour passer votre chemin.</p>
+  </div>
+  <div class="gate-msg" id="gateMsg">
+    <h3>Créez un compte pour découvrir les profils</h3>
+    <p>L'accès est réservé aux membres inscrits et vérifiés, pour la sécurité de tous.</p>
+    <button onclick="openAuth('signup')">Créer un compte gratuit</button>
+  </div>
+  <div class="stack-area" id="stackArea">
+    <div class="stack-empty" id="stackEmpty">
+      <h3>Vous avez tout vu pour l'instant</h3>
+      <p>Revenez bientôt, de nouveaux profils arrivent chaque jour.</p>
+      <button onclick="resetStack()">Revoir les profils</button>
+    </div>
+  </div>
+  <div class="actions" id="stackActions">
+    <button class="act-btn act-pass" onclick="swipe('pass')" title="Passer">✕</button>
+    <button class="act-btn act-like" onclick="swipe('like')" title="Aimer">É</button>
+  </div>
+</section>
+
+<section id="matches" style="background:var(--blush-soft);">
+  <div class="section-head">
+    <div class="section-eyebrow">Vos connexions</div>
+    <h2>Là où deux lettres se répondent</h2>
+    <p>Un match n'apparaît ici que si l'intérêt est réciproque.</p>
+  </div>
+  <div class="matches-wrap">
+    <div class="match-empty" id="matchEmpty">Aucune connexion pour le moment — likez un profil pour commencer.</div>
+    <div class="match-grid" id="matchGrid"></div>
+  </div>
+</section>
+
+<section id="direct">
+  <div class="section-head">
+    <div class="section-eyebrow">Temps réel</div>
+    <h2>Discutez avec une vraie personne</h2>
+    <p>Créez un salon et partagez son code avec quelqu'un pour échanger de vrais messages en direct, avec signal d'appel — sans audio ni vidéo réellement transmis (démonstration d'interface).</p>
+  </div>
+  <div class="direct-wrap" id="directWrap">
+    <div class="room-picker" id="roomPicker">
+      <button class="btn-primary" onclick="createRoom()">Créer un salon</button>
+      <div class="or-sep">ou</div>
+      <div class="join-row">
+        <input type="text" id="joinCodeInput" placeholder="Code du salon">
+        <button class="btn-ghost" onclick="joinRoomFromInput()">Rejoindre</button>
+      </div>
+      <div class="room-hint">Ouvrez ce site sur un autre appareil (ou envoyez-le à quelqu'un), créez un salon d'un côté, rejoignez-le avec le code de l'autre.</div>
+    </div>
+    <div class="live-chat" id="liveChat" style="display:none;">
+      <div class="live-head">
+        <div>
+          <div class="live-label">Salon</div>
+          <div class="live-code" id="liveCodeDisplay"></div>
+        </div>
+        <div class="live-actions">
+          <button class="call-btn" onclick="startCall()" title="Appeler">📞</button>
+          <button class="leave-btn" onclick="leaveRoom()" title="Quitter">Quitter</button>
+        </div>
+      </div>
+      <div class="live-body" id="liveBody"></div>
+      <div class="chat-input">
+        <input type="text" id="liveInput" placeholder="Écrire un message…" onkeydown="if(event.key==='Enter')sendRealMsg()">
+        <button onclick="sendRealMsg()">➤</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pourquoi">
+  <div class="section-head">
+    <div class="section-eyebrow">Pourquoi c'est gratuit</div>
+    <h2>Aucune fonctionnalité ne se paie</h2>
+  </div>
+  <div class="features">
+    <div class="feature">
+      <div class="fnum">I.</div>
+      <h3>Profil et photos illimités</h3>
+      <p>Créez un profil complet, sans limite de photos ni de description, sans jamais sortir votre carte bancaire.</p>
+    </div>
+    <div class="feature">
+      <div class="fnum">II.</div>
+      <h3>Messagerie sans restriction</h3>
+      <p>Une fois le match établi, discutez autant que vous le souhaitez, sans quota de messages ni palier premium.</p>
+    </div>
+    <div class="feature">
+      <div class="fnum">III.</div>
+      <h3>Visibilité égale pour tous</h3>
+      <p>Pas de mise en avant payante : chaque profil est présenté selon les mêmes règles, aux mêmes personnes.</p>
+    </div>
+    <div class="feature">
+      <div class="fnum">IV.</div>
+      <h3>Modération humaine</h3>
+      <p>Les profils sont vérifiés pour garder un espace respectueux, sans que cela ne coûte quoi que ce soit aux membres.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">Écl<em>o</em>sion</div>
+  <p>Une démonstration de site de rencontre — profils fictifs, aucune donnée réelle n'est collectée ni stockée.</p>
+  <div class="fbottom">© 2026 Éclosion — Maquette de démonstration</div>
+</footer>
+
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-box" id="authBox">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+
+    <!-- STEP 1 : signup -->
+    <div id="stepSignup">
+      <div class="auth-step-label">Étape 1 / 3</div>
+      <h3>Créer votre compte</h3>
+      <div class="sub">Gratuit, sans engagement. Vous vérifierez votre identité à l'étape suivante.</div>
+      <div class="field-row">
+        <div class="field" id="f-prenom">
+          <label>Prénom</label>
+          <input type="text" id="in-prenom" placeholder="Camille">
+          <div class="field-error">Champ requis</div>
+        </div>
+        <div class="field" id="f-naissance">
+          <label>Date de naissance</label>
+          <input type="date" id="in-naissance">
+          <div class="field-error">Vous devez avoir 18 ans révolus</div>
+        </div>
+      </div>
+      <div class="field" id="f-email">
+        <label>Adresse e-mail</label>
+        <input type="email" id="in-email" placeholder="vous@exemple.fr">
+        <div class="field-error">Adresse e-mail invalide</div>
+      </div>
+      <div class="field" id="f-pass">
+        <label>Mot de passe</label>
+        <input type="password" id="in-pass" placeholder="8 caractères minimum">
+        <div class="field-error">8 caractères minimum</div>
+      </div>
+      <button class="auth-submit" onclick="submitSignup()">Continuer vers la vérification</button>
+      <div class="auth-switch">Déjà inscrit ? <a onclick="openAuth('login')">Se connecter</a></div>
+    </div>
+
+    <!-- STEP 2 : ID verification -->
+    <div id="stepVerif" style="display:none;">
+      <div class="auth-step-label">Étape 2 / 3</div>
+      <h3>Vérifiez votre identité</h3>
+      <div class="sub">Pour la sécurité de la communauté, chaque membre confirme son identité et sa majorité avec une pièce officielle.</div>
+
+      <div class="id-types">
+        <button class="active" data-type="cni" onclick="pickIdType(this)">Carte d'identité</button>
+        <button data-type="passeport" onclick="pickIdType(this)">Passeport</button>
+        <button data-type="permis" onclick="pickIdType(this)">Permis de conduire</button>
+      </div>
+
+      <div class="id-upload" id="idUploadZone" onclick="document.getElementById('idFile').click()">
+        <div class="icon">🪪</div>
+        <div class="title">Déposer une photo de votre pièce d'identité</div>
+        <div class="hint">JPG ou PNG · les informations restent dans votre navigateur pour cette démo</div>
+      </div>
+      <input type="file" id="idFile" accept="image/*" style="display:none" onchange="handleIdFile(event)">
+
+      <div class="id-preview" id="idPreview">
+        <img id="idPreviewImg" alt="Aperçu pièce d'identité">
+        <span class="fname" id="idFileName"></span>
+        <span class="remove" onclick="removeIdFile(event)">Retirer</span>
+      </div>
+
+      <button class="auth-submit" id="verifSubmitBtn" onclick="submitVerification()" disabled>Envoyer pour vérification</button>
+
+      <div class="privacy-note">
+        Démo uniquement : ce document n'est ni envoyé ni conservé sur un serveur. Sur un vrai service, ce traitement nécessiterait un prestataire de vérification agréé, un chiffrement de bout en bout et une durée de conservation strictement limitée, conformément au RGPD.
+      </div>
+    </div>
+
+    <!-- STEP 3 : pending / success -->
+    <div id="stepStatus" style="display:none;">
+      <div class="verif-status" id="statusPending">
+        <div class="spinner"></div>
+        <h3>Vérification en cours…</h3>
+        <div class="sub">Cela prend en général quelques minutes. Vous pouvez déjà explorer les profils, votre badge « vérifié » apparaîtra ensuite.</div>
+      </div>
+      <div class="verif-status" id="statusDone" style="display:none;">
+        <div class="check">✓</div>
+        <h3>Identité vérifiée</h3>
+        <div class="sub">Bienvenue, <span id="doneNameSpan"></span>. Votre compte est actif et vérifié.</div>
+        <button class="auth-submit" onclick="closeAuth()">Découvrir des profils</button>
+      </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="stepLogin" style="display:none;">
+      <div class="auth-step-label">Connexion</div>
+      <h3>Content de vous revoir</h3>
+      <div class="sub">Démo — n'importe quel identifiant vous reconnecte à un profil vérifié fictif.</div>
+      <div class="field">
+        <label>Adresse e-mail</label>
+        <input type="email" id="login-email" placeholder="vous@exemple.fr">
+      </div>
+      <div class="field">
+        <label>Mot de passe</label>
+        <input type="password" id="login-pass" placeholder="••••••••">
+      </div>
+      <button class="auth-submit" onclick="submitLogin()">Se connecter</button>
+      <div class="auth-switch">Pas encore de compte ? <a onclick="openAuth('signup')">S'inscrire</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="call-overlay" id="callOverlay">
+  <div class="call-box">
+    <div class="call-avatar" id="callAvatar">?</div>
+    <div class="call-status" id="callStatusText">Appel en cours…</div>
+    <div class="call-timer" id="callTimer">00:00</div>
+    <div class="call-note">Démonstration — aucun son n'est transmis, seule l'interface d'appel est simulée entre les deux salons.</div>
+    <div class="call-actions">
+      <button class="call-decline" id="callDeclineBtn" onclick="declineOrEndCall()">✕</button>
+      <button class="call-accept" id="callAcceptBtn" onclick="acceptCall()" style="display:none;">✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="chat-overlay" id="chatOverlay">
+  <div class="chat-box">
+    <div class="chat-head">
+      <span id="chatName">Conversation</span>
+      <button onclick="closeChat()">✕</button>
+    </div>
+    <div class="chat-body" id="chatBody"></div>
+    <div class="chat-input">
+      <input type="text" id="chatInput" placeholder="Écrire un message…" onkeydown="if(event.key==='Enter')sendMsg()">
+      <button onclick="sendMsg()">➤</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
